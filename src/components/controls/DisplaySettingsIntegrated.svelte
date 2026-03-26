@@ -38,6 +38,8 @@ import type { WALLPAPER_MODE } from "@/types/config";
 
 let hue = $state(getHue());
 const defaultHue = getDefaultHue();
+const minHue = siteConfig.themeColor.minHue ?? defaultHue;
+const maxHue = siteConfig.themeColor.maxHue ?? defaultHue;
 let wallpaperMode: WALLPAPER_MODE = $state(backgroundWallpaper.mode);
 const defaultWallpaperMode = backgroundWallpaper.mode;
 let currentLayout: "list" | "grid" = $state("list");
@@ -393,9 +395,9 @@ $effect(() => {
                 </div>
             </div>
         </div>
-        <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
-            <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
-                   class="slider" id="colorSlider" step="5" style="width: 100%">
+        <div class="w-full h-6 px-1 bg-(--btn-regular-bg) rounded select-none">
+            <input aria-label={i18n(I18nKey.themeColor)} type="range" min={minHue} max={maxHue} bind:value={hue}
+                   class="slider" id="colorSlider" step="1" style="width: 100%">
         </div>
     </div>
     {/if}

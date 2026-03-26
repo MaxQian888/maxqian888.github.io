@@ -3,6 +3,7 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { getDefaultHue, getHue, setHue } from "@utils/setting-utils";
 import Icon from "@/components/common/Icon.svelte";
+import { siteConfig } from "@/config";
 
 /**
  * 主题色设置面板
@@ -11,6 +12,8 @@ import Icon from "@/components/common/Icon.svelte";
 
 let hue = getHue();
 const defaultHue = getDefaultHue();
+const minHue = siteConfig.themeColor.minHue ?? defaultHue;
+const maxHue = siteConfig.themeColor.maxHue ?? defaultHue;
 
 function resetHue() {
 	hue = getDefaultHue();
@@ -42,9 +45,9 @@ $: if (hue || hue === 0) {
             </div>
         </div>
     </div>
-    <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
-        <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
-               class="slider" id="colorSlider" step="5" style="width: 100%">
+    <div class="w-full h-6 px-1 bg-(--btn-regular-bg) rounded select-none">
+        <input aria-label={i18n(I18nKey.themeColor)} type="range" min={minHue} max={maxHue} bind:value={hue}
+               class="slider" id="colorSlider" step="1" style="width: 100%">
     </div>
 </div>
 

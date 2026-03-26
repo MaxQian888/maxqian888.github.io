@@ -6,6 +6,8 @@ import { backgroundWallpaper, siteConfig } from "@/config";
 <div
   id="config-carrier"
   data-hue={siteConfig.themeColor.hue}
+  data-hue-min={siteConfig.themeColor.minHue ?? siteConfig.themeColor.hue}
+  data-hue-max={siteConfig.themeColor.maxHue ?? siteConfig.themeColor.hue}
   data-wallpaper-mode={backgroundWallpaper.mode}
 >
 </div>

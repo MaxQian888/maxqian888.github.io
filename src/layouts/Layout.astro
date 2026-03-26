@@ -51,6 +51,8 @@ const isHomePageCheck = isHomePage(Astro.url.pathname);
 // defines global css variables
 // why doing this in Layout instead of GlobalStyles: https://github.com/withastro/astro/issues/6728#issuecomment-1502203757
 const configHue = siteConfig.themeColor.hue;
+const configHueMin = siteConfig.themeColor.minHue ?? configHue;
+const configHueMax = siteConfig.themeColor.maxHue ?? configHue;
 
 // 获取导航栏透明模式配置
 const navbarTransparentMode =
@@ -241,6 +243,8 @@ const siteLang = lang.replace("_", "-");
         BANNER_HEIGHT_EXTEND,
         PAGE_WIDTH,
         configHue,
+        configHueMin,
+        configHueMax,
         defaultMode: siteConfig.themeColor.defaultMode ?? "light",
         defaultWallpaperMode: backgroundWallpaper.mode,
         isWallpaperSwitchable:
@@ -291,8 +295,18 @@ const siteLang = lang.replace("_", "-");
       );
 
       // Load the hue from local storage
-      const hue = localStorage.getItem("hue") || configHue;
-      document.documentElement.style.setProperty("--hue", hue);
+      function clampHue(hueValue) {
+        const parsedHue = Number.parseInt(String(hueValue), 10);
+        if (Number.isNaN(parsedHue)) {
+          return configHue;
+        }
+        return Math.min(configHueMax, Math.max(configHueMin, parsedHue));
+      }
+
+      const storedHue = localStorage.getItem("hue");
+      const hue = clampHue(storedHue ?? configHue);
+      localStorage.setItem("hue", String(hue));
+      document.documentElement.style.setProperty("--hue", String(hue));
 
       // 设置卡片透明度（全屏透明模式下使用）
       document.documentElement.style.setProperty("--card-transparent-opacity", String(cardTransparentOpacity));

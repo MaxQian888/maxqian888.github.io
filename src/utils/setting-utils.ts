@@ -24,14 +24,47 @@ declare global {
 	}
 }
 
-export function getDefaultHue(): number {
-	const fallback = "250";
-	// 检查是否在浏览器环境中
+function clampHue(hue: number, minHue: number, maxHue: number): number {
+	if (Number.isNaN(hue)) {
+		return minHue;
+	}
+	return Math.min(maxHue, Math.max(minHue, hue));
+}
+
+function getHueBounds(): { minHue: number; maxHue: number } {
+	const fallbackHue = siteConfig.themeColor.hue;
+	const fallbackMinHue = siteConfig.themeColor.minHue ?? fallbackHue;
+	const fallbackMaxHue = siteConfig.themeColor.maxHue ?? fallbackHue;
+
 	if (typeof document === "undefined") {
-		return Number.parseInt(fallback, 10);
+		return { minHue: fallbackMinHue, maxHue: fallbackMaxHue };
+	}
+
+	const configCarrier = document.getElementById("config-carrier");
+	return {
+		minHue: Number.parseInt(
+			configCarrier?.dataset.hueMin || String(fallbackMinHue),
+			10,
+		),
+		maxHue: Number.parseInt(
+			configCarrier?.dataset.hueMax || String(fallbackMaxHue),
+			10,
+		),
+	};
+}
+
+export function getDefaultHue(): number {
+	const fallbackHue = siteConfig.themeColor.hue;
+	const { minHue, maxHue } = getHueBounds();
+	if (typeof document === "undefined") {
+		return clampHue(fallbackHue, minHue, maxHue);
 	}
 	const configCarrier = document.getElementById("config-carrier");
-	return Number.parseInt(configCarrier?.dataset.hue || fallback, 10);
+	const rawHue = Number.parseInt(
+		configCarrier?.dataset.hue || String(fallbackHue),
+		10,
+	);
+	return clampHue(rawHue, minHue, maxHue);
 }
 
 export function getDefaultTheme(): LIGHT_DARK_MODE {
@@ -63,8 +96,10 @@ export function getHue(): number {
 	if (typeof window === "undefined" || !window.localStorage) {
 		return getDefaultHue();
 	}
+	const { minHue, maxHue } = getHueBounds();
 	const stored = localStorage.getItem("hue");
-	return stored ? Number.parseInt(stored, 10) : getDefaultHue();
+	const resolvedHue = stored ? Number.parseInt(stored, 10) : getDefaultHue();
+	return clampHue(resolvedHue, minHue, maxHue);
 }
 
 export function setHue(hue: number): void {
@@ -76,12 +111,14 @@ export function setHue(hue: number): void {
 	) {
 		return;
 	}
-	localStorage.setItem("hue", String(hue));
+	const { minHue, maxHue } = getHueBounds();
+	const safeHue = clampHue(hue, minHue, maxHue);
+	localStorage.setItem("hue", String(safeHue));
 	const r = document.querySelector(":root") as HTMLElement;
 	if (!r) {
 		return;
 	}
-	r.style.setProperty("--hue", String(hue));
+	r.style.setProperty("--hue", String(safeHue));
 }
 
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {

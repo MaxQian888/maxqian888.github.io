@@ -1,38 +1,85 @@
-# 关于我 / About Me
+# 🙋‍♂️ Hi there
 
-你好！我是 **夏叶** ，一个在数字世界中默默无闻的一片叶子。
+<p align="center">
+  <a href="https://github.com/AstroAir"><img src="https://img.shields.io/badge/status-updating-brightgreen.svg" alt="Status: Updating"></a>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=AstroAir.AstroAir" alt="Visitors"/>
+</p>
 
-## 🛠️ 关于本站
+[![Typing SVG](https://readme-typing-svg.demolab.com?color=%2336BCF7&center=true&vCenter=true&width=600&lines=Hi+there+👋,+I+am+Max+Qian;Welcome+to+My+Profile!;Astronomy+Enthusiast+%26+Software+Builder)](https://git.io/typing-svg)
 
-这个网站使用 **Astro** 框架构建，采用了 [Firefly](https://github.com/CuteLeaf/Firefly) 模板，Firefly 是基于 [Fuwari](https://github.com/saicaca/fuwari) 的二次开发。
+I'm **Max Qian** — a passionate developer with a deep love for the stars 🌌 and clean, efficient code. My mission is to bridge the gap between astronomy and software by building open-source tools that empower researchers, educators, and fellow stargazers.
 
-**Firefly** 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
-
-
-**🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
-
-**🏠我的博客： [https://blog.cuteleaf.cn](https://blog.cuteleaf.cn/)**
-
-**📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
-
-**⭐Firefly开源地址：[https://github.com/CuteLeaf/Firefly](https://github.com/CuteLeaf/Firefly)** 
-
-**⭐Fuwari开源地址：[https://github.com/saicaca/fuwari](https://github.com/saicaca/fuwari)**
-
-::github{repo="CuteLeaf/Firefly"}
-
-::github{repo="saicaca/fuwari"}
-
-
-## 📫 联系方式
-
-如果你想和我交流技术问题，分享有趣的想法，或者只是想打个招呼，欢迎通过以下方式联系我：
-
-- 💻 **GitHub**: [CuteLeaf](https://github.com/CuteLeaf)
-- ✉️ **Email**: [xiaye@msn.com](mailto:xiaye@msn.com)
-- 🐧 **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
+🔭 **Astronomy** isn’t just a hobby for me—it’s a lens through which I view problem-solving. Whether it’s simulating celestial mechanics or processing telescope data, I thrive on turning cosmic curiosity into functional software.
 
 ---
 
-*感谢你的来访！希望在这里能找到对你有用的内容！*
+## 🔍 What I’m Up To
 
+- 🤔 **Exploring** emerging technologies and crafting practical software solutions—sometimes with a quick hack, sometimes with elegant architecture.
+- 🌱 **Deepening my knowledge** in **System Design**, **Advanced Algorithms**, and **High-Performance Computing**—because the universe doesn’t wait, and neither should our code.
+- ✍️ **C++ Development** and **Competitive Programming** are my go-to playgrounds for sharpening logic and performance intuition.
+- ⭐ **Primary Focus**: Building and contributing to **astronomical software**—from data pipelines to visualization tools and simulation engines.
+
+---
+
+## 🛠 Tech Stack
+
+### 💻 Programming Languages
+
+<p>
+  <img src="https://img.shields.io/badge/-C++-black?style=for-the-badge&logo=c%2B%2B&logoColor=blue" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-Python-black?style=for-the-badge&logo=python" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-C-black?style=for-the-badge&logo=c&logoColor=blue" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-JavaScript-black?style=for-the-badge&logo=javascript" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-TypeScript-black?style=for-the-badge&logo=typescript" style="margin:5px"/>
+</p>
+
+### 🧩 Frameworks & APIs
+
+<p>
+  <img src="https://img.shields.io/badge/-Qt-black?style=for-the-badge&logo=qt" style="margin:5px"/>
+</p>
+
+### 🛠 Tools & Platforms
+
+<p>
+  <img src="https://img.shields.io/badge/-Git-black?style=for-the-badge&logo=git" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-GitHub-black?style=for-the-badge&logo=github" style="margin:5px"/>
+</p>
+
+### 💡 IDEs & Editors
+
+<p>
+  <img src="https://img.shields.io/badge/-VS%20Code-black?style=for-the-badge&logo=visual-studio-code" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-CLion-black?style=for-the-badge&logo=clion" style="margin:5px"/>
+  <img src="https://img.shields.io/badge/-PyCharm-black?style=for-the-badge&logo=pycharm" style="margin:5px"/>
+</p>
+
+---
+
+## 🌟 Open Source & Collaboration
+
+I believe in the power of **open collaboration**. Most of my projects are open-source, and I warmly welcome contributions, suggestions, or even just a friendly chat about astronomy or algorithms!
+
+👉 **Feel free to:**
+
+- 🌱 **Star** a repo you find useful  
+- 💬 **Open an issue** if you spot a bug or have an idea  
+- 🤝 **Fork & contribute** to make our tools better together
+
+---
+
+## 📬 Let’s Connect
+
+While I spend most of my time under the stars (or in front of a terminal), I’m always open to meaningful conversations—whether it’s about orbital mechanics, optimizing a C++ loop, or the latest in telescope tech.
+
+✨ *There’s always someone who will look at the starry sky with you.*  
+And maybe, that someone could be me.
+
+---
+
+> 🚀 **“We are a way for the cosmos to know itself.”** — Carl Sagan
+
+---
+
+*Profile last updated: September 2025*  
