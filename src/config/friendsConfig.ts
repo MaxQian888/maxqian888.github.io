@@ -75,8 +75,8 @@ export const friendsConfig: FriendLink[] = [
 		siteurl: "cube1345.github.io",
 		tags: ["Blog"],
 		weight: 5,
-		enabled: true
-	}
+		enabled: true,
+	},
 ];
 
 // 获取启用的友链并进行排序
