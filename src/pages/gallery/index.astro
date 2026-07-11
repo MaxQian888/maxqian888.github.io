@@ -24,11 +24,12 @@ const albums = galleryConfig.albums.map((album) => {
 
 // 收集所有标签用于筛选
 const allTags = [...new Set(albums.flatMap((a) => a.tags || []))].sort();
+const totalPhotos = albums.reduce((sum, a) => sum + a.photoCount, 0);
 ---
 
 <MainGridLayout title={title} description={description}>
   <div
-    class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32"
+    class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32 onload-animation"
   >
     <div class="card-base z-10 px-9 py-6 relative w-full">
       <!-- 页面标题和描述 -->
@@ -42,6 +43,11 @@ const allTags = [...new Set(albums.flatMap((a) => a.tags || []))].sort();
           <div class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
             {title}
           </div>
+          {albums.length > 0 && (
+            <span class="text-sm font-medium px-2 py-0.5 rounded-full bg-(--primary)/10 text-(--primary)">
+              {albums.length} / {totalPhotos}
+            </span>
+          )}
         </div>
         {description && (
           <p class="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
