@@ -3,7 +3,11 @@ import { Icon } from "astro-icon/components";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedPostsList } from "@/utils/content-utils";
+import { formatDateToYYYYMMDD } from "@/utils/date-utils";
 import { url } from "@/utils/url-utils";
+
+const recentPosts = (await getSortedPostsList()).slice(0, 5);
 ---
 
 <MainGridLayout title={i18n(I18nKey.notFound)} description={i18n(I18nKey.notFoundDescription)}>
@@ -63,6 +67,33 @@ import { url } from "@/utils/url-utils";
             </div>
         </div>
     </div>
+
+    {recentPosts.length > 0 && (
+        <div class="card-base rounded-(--radius-large) px-9 py-6 mt-4 onload-animation">
+            <h2 class="text-xl font-bold text-90 mb-4 flex items-center gap-2">
+                <Icon name="material-symbols:article-outline" class="text-(--primary) text-2xl" />
+                {i18n(I18nKey.recentPosts)}
+            </h2>
+            <div class="flex flex-col gap-1">
+                {recentPosts.map((post) => (
+                    <a
+                        href={url(`/posts/${post.id}/`)}
+                        class="group flex items-center justify-between gap-4 px-3 py-2.5 rounded-lg hover:bg-(--btn-plain-bg-hover) transition-colors"
+                    >
+                        <span class="font-medium text-75 group-hover:text-(--primary) transition-colors truncate">
+                            {post.data.title}
+                        </span>
+                        <time
+                            datetime={post.data.published.toISOString()}
+                            class="text-sm text-50 shrink-0"
+                        >
+                            {formatDateToYYYYMMDD(post.data.published)}
+                        </time>
+                    </a>
+                ))}
+            </div>
+        </div>
+    )}
 </MainGridLayout>
 
 <style>
