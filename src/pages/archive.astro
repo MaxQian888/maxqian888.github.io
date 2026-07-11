@@ -3,11 +3,58 @@ import ArchivePanel from "@components/controls/ArchivePanel.svelte";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
-import { getSortedPostsList } from "@/utils/content-utils";
+import { Icon } from "astro-icon/components";
+import {
+	getCategoryList,
+	getSortedPostsList,
+	getTagList,
+} from "@/utils/content-utils";
 
 const sortedPostsList = await getSortedPostsList();
+const categories = await getCategoryList();
+const tags = await getTagList();
+
+const years = new Set(
+	sortedPostsList.map((post) => new Date(post.data.published).getFullYear()),
+);
+
+const stats = [
+	{
+		icon: "material-symbols:article-outline",
+		label: i18n(I18nKey.siteStatsPostCount),
+		value: sortedPostsList.length,
+	},
+	{
+		icon: "material-symbols:calendar-month-outline",
+		label: i18n(I18nKey.archive),
+		value: years.size,
+	},
+	{
+		icon: "material-symbols:folder-outline",
+		label: i18n(I18nKey.siteStatsCategoryCount),
+		value: categories.length,
+	},
+	{
+		icon: "material-symbols:label-outline",
+		label: i18n(I18nKey.siteStatsTagCount),
+		value: tags.length,
+	},
+];
 ---
 
 <MainGridLayout title={i18n(I18nKey.archive)}>
+  <div class="card-base rounded-(--radius-large) px-6 py-4 mb-4 onload-animation">
+    <div class="grid grid-cols-2 md:grid-cols-4">
+      {stats.map((stat) => (
+        <div class="flex flex-col items-center gap-1 py-2 px-2">
+          <div class="flex items-center gap-1.5 text-(--primary)">
+            <Icon name={stat.icon} class="text-lg" />
+            <span class="text-xl font-bold text-90">{stat.value}</span>
+          </div>
+          <span class="text-xs text-50">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
   <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte" />
 </MainGridLayout>

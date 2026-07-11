@@ -205,7 +205,7 @@ const activeTab = tabs[0]?.id || "anime";
 ---
 
 <MainGridLayout title={i18n(I18nKey.bangumi)} description={i18n(I18nKey.bangumiSubtitle)}>
-  <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
+  <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32 onload-animation">
     <div class="card-base z-10 px-9 py-6 relative w-full">
         <!-- 页面标题 -->
         <div class="relative w-full mb-8">
@@ -217,6 +217,11 @@ const activeTab = tabs[0]?.id || "anime";
                     <div class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
                         {i18n(I18nKey.bangumi)}
                     </div>
+                    {tabs.length > 0 && (
+                        <span class="text-sm font-medium px-2 py-0.5 rounded-full bg-(--primary)/10 text-(--primary)">
+                            {tabs.reduce((sum, tab) => sum + tab.count, 0)}
+                        </span>
+                    )}
                 </div>
                 <p class="text-base text-neutral-600 dark:text-neutral-400 leading-relaxed">
                     {i18n(I18nKey.bangumiSubtitle)}
