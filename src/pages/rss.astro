@@ -54,6 +54,43 @@ const recentPosts = posts.slice(0, 6);
             </div>
         </div>
 
+        <!-- 一键订阅 -->
+        <div class="card-base rounded-(--radius-large) p-6 mb-6">
+            <h2 class="text-xl font-bold text-90 mb-4 flex items-center">
+                <Icon name="material-symbols:bolt" class="mr-2 text-(--primary)" />
+                {i18n(I18nKey.rss)}
+            </h2>
+            <div class="flex flex-wrap gap-3">
+                <a
+                    href={`https://feedly.com/i/subscription/feed/${encodeURIComponent(`${Astro.site}rss.xml`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 btn-regular rounded-lg font-medium text-sm"
+                >
+                    <Icon name="simple-icons:feedly" class="text-base" />
+                    Feedly
+                </a>
+                <a
+                    href={`https://www.inoreader.com/feed/${encodeURIComponent(`${Astro.site}rss.xml`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 btn-regular rounded-lg font-medium text-sm"
+                >
+                    <Icon name="simple-icons:inoreader" class="text-base" />
+                    Inoreader
+                </a>
+                <a
+                    href={`${Astro.site}rss.xml`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-4 py-2 btn-regular rounded-lg font-medium text-sm"
+                >
+                    <Icon name="material-symbols:rss-feed" class="text-base" />
+                    XML
+                </a>
+            </div>
+        </div>
+
         <!-- 最新文章预览 -->
         <div class="card-base rounded-(--radius-large) p-6 mb-6">
             <h2 class="text-xl font-bold text-90 mb-4 flex items-center">
