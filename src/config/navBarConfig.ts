@@ -66,13 +66,13 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 		children: [
 			{
 				name: "GitHub",
-				url: "https://github.com/AstroAir",
+				url: "https://github.com/MaxQian888",
 				external: true,
 				icon: "fa7-brands:github",
 			},
 			{
 				name: "Gitee",
-				url: "https://gitee.com/AstroAir",
+				url: "https://gitee.com/MaxQian888",
 				external: true,
 				icon: "fa7-brands:gitee",
 			},

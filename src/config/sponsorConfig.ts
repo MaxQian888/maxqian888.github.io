@@ -43,34 +43,24 @@ export const sponsorConfig: SponsorConfig = {
 			name: "ko-fi",
 			icon: "simple-icons:kofi",
 			qrCode: "",
-			link: "https://ko-fi.com/cuteleaf",
-			description: "Buy a Coffee for Firefly",
-			enabled: true,
+			// 填入你自己的 ko-fi 链接后再启用，例如 "https://ko-fi.com/你的用户名"
+			link: "",
+			description: "Buy me a Coffee",
+			enabled: false,
 		},
 		{
 			name: "爱发电",
 			icon: "simple-icons:afdian",
 			qrCode: "",
-			link: "https://ifdian.net/a/cuteleaf",
+			// 填入你自己的爱发电链接后再启用，例如 "https://ifdian.net/a/你的用户名"
+			link: "",
 			description: "通过 爱发电 进行赞助",
-			enabled: true,
+			enabled: false,
 		},
 	],
 
-	// 赞助者列表（可选）
+	// 赞助者列表（可选），按下面示例格式填入真实赞助者
 	sponsors: [
-		// 示例：已实名赞助者
-		{
-			name: "夏叶",
-			amount: "¥50",
-			date: "2025-10-01",
-		},
-
-		// 示例：匿名赞助者
-		{
-			name: "匿名用户",
-			amount: "¥20",
-			date: "2025-10-01",
-		},
+		// { name: "赞助者名称", amount: "¥50", date: "2025-01-01" },
 	],
 };

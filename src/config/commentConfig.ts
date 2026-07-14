@@ -47,13 +47,13 @@ export const commentConfig: CommentConfig = {
 	//giscus评论系统配置
 	giscus: {
 		// 设置 Giscus 评论系统仓库
-		repo: "CuteLeaf/Firefly",
-		// 设置 Giscus 评论系统仓库ID
-		repoId: "R_kgD2gfdFGd",
+		repo: "MaxQian888/maxqian888.github.io",
+		// 设置 Giscus 评论系统仓库ID（启用 giscus 前，请到 https://giscus.app 重新生成并填入）
+		repoId: "",
 		// 设置 Giscus 评论系统分类
 		category: "General",
-		// 获取 Giscus 评论系统分类ID
-		categoryId: "DIC_kwDOKy9HOc4CegmW",
+		// 获取 Giscus 评论系统分类ID（启用 giscus 前，请到 https://giscus.app 重新生成并填入）
+		categoryId: "",
 		// 获取 Giscus 评论系统映射方式
 		mapping: "title",
 		// 获取 Giscus 评论系统严格模式

@@ -1,8 +1,8 @@
 # 🙋‍♂️ Hi there
 
 <p align="center">
-  <a href="https://github.com/AstroAir"><img src="https://img.shields.io/badge/status-updating-brightgreen.svg" alt="Status: Updating"></a>
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=AstroAir.AstroAir" alt="Visitors"/>
+  <a href="https://github.com/MaxQian888"><img src="https://img.shields.io/badge/status-updating-brightgreen.svg" alt="Status: Updating"></a>
+  <img src="https://visitor-badge.laobi.icu/badge?page_id=MaxQian888.MaxQian888" alt="Visitors"/>
 </p>
 
 [![Typing SVG](https://readme-typing-svg.demolab.com?color=%2336BCF7&center=true&vCenter=true&width=600&lines=Hi+there+👋,+I+am+Max+Qian;Welcome+to+My+Profile!;Astronomy+Enthusiast+%26+Software+Builder)](https://git.io/typing-svg)
