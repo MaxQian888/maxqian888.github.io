@@ -544,6 +544,30 @@ html {
   @apply text-xs;
 }
 
+/* 沉浸阅读模式：隐藏导航栏与侧边栏，居中收窄正文（由 ImmersiveToggle 切换） */
+html.immersive-reading #top-row {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+html.immersive-reading #left-sidebar-wrapper,
+html.immersive-reading #left-sidebar-dynamic,
+html.immersive-reading #right-sidebar-static,
+html.immersive-reading #right-sidebar-dynamic,
+html.immersive-reading #mobile-bottom-sidebar {
+  display: none !important;
+}
+
+html.immersive-reading #main-grid {
+  grid-template-columns: minmax(0, 48rem) !important;
+  justify-content: center !important;
+}
+
+html.immersive-reading #main-grid > *:not(.absolute) {
+  grid-column: 1 !important;
+}
+
 /* 响应式分页样式 */
 .device-mobile .pagination-info {
   @apply text-xs;

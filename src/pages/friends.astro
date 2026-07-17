@@ -49,7 +49,7 @@ const description =
     <div class="card-base z-10 px-9 py-6 relative w-full">
       <!-- 页面标题和描述 -->
       <div class="mb-4">
-        <div class="flex items-center gap-3 mb-3">
+        <div class="flex items-center gap-3 mb-3 flex-wrap">
           <div
             class="h-8 w-8 rounded-lg bg-(--primary) flex items-center justify-center text-white dark:text-black/70"
           >
@@ -61,6 +61,16 @@ const description =
           <span class="text-sm font-medium px-2 py-0.5 rounded-full bg-(--primary)/10 text-(--primary)">
             {items.length}
           </span>
+          {items.length > 0 && (
+            <random-visit class="ml-auto">
+              <button
+                class="btn-regular px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 active:scale-95 transition-all duration-200"
+              >
+                <Icon name="material-symbols:casino-outline" class="random-visit-icon text-lg" />
+                {i18n(I18nKey.randomVisit)}
+              </button>
+            </random-visit>
+          )}
         </div>
         {
           description && (
@@ -95,13 +105,14 @@ const description =
 
       <div class="friends-grid my-4">
         {
-          items.map((item) => (
+          items.map((item, index) => (
             <a
               href={item.siteurl}
               target="_blank"
               rel="noopener noreferrer"
               data-tags={item.tags?.join(",")}
-              class="friend-card group flex items-center gap-3 p-2.5 rounded-xl border border-(--line-divider) hover:border-(--primary) hover:bg-(--card-bg) transition-all duration-300 hover:shadow-lg relative overflow-hidden"
+              style={`animation-delay: ${Math.min(index * 50, 600)}ms`}
+              class="friend-card animate-fade-in-up group flex items-center gap-3 p-2.5 rounded-xl border border-(--line-divider) hover:border-(--primary) hover:bg-(--card-bg) transition-all duration-300 hover:shadow-lg relative overflow-hidden"
             >
               {/* 背景装饰 - 仅悬停显示 */}
               <div class="absolute inset-0 bg-(--primary) opacity-0 group-hover:opacity-5 transition-opacity duration-300 pointer-events-none" />
@@ -220,6 +231,8 @@ const description =
           cards.forEach((card) => {
             const cardEl = card;
             const tags = (cardEl.dataset.tags || "").split(",");
+            // 筛选切换后不再套用首屏的交错延迟
+            cardEl.style.animationDelay = "0ms";
             if (
               selectedTag === "all" ||
               (selectedTag && tags.includes(selectedTag))
@@ -235,6 +248,42 @@ const description =
       }
       customElements.define("friend-filter", FriendFilter);
     }
+
+    if (!customElements.get("random-visit")) {
+      class RandomVisit extends HTMLElement {
+        connectedCallback() {
+          this.addEventListener("click", this.handleClick);
+        }
+
+        disconnectedCallback() {
+          this.removeEventListener("click", this.handleClick);
+        }
+
+        handleClick() {
+          const container = this.closest(".card-base");
+          if (!container) return;
+
+          // 仅在当前筛选可见的友链中随机挑选
+          const cards = Array.from(
+            container.querySelectorAll(".friend-card")
+          ).filter((card) => card.style.display !== "none");
+          if (cards.length === 0) return;
+
+          const icon = this.querySelector(".random-visit-icon");
+          if (icon) {
+            icon.classList.remove("random-visit-spin");
+            void icon.getBoundingClientRect();
+            icon.classList.add("random-visit-spin");
+          }
+
+          const target = cards[Math.floor(Math.random() * cards.length)];
+          setTimeout(() => {
+            window.open(target.href, "_blank", "noopener");
+          }, 350);
+        }
+      }
+      customElements.define("random-visit", RandomVisit);
+    }
   </script>
 
   <style is:global>
@@ -242,6 +291,44 @@ const description =
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 0.75rem;
+    }
+
+    .animate-fade-in-up {
+      animation: friend-fade-in-up 0.5s ease-out backwards;
+    }
+
+    @keyframes friend-fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .random-visit-spin {
+      animation: random-visit-spin 0.35s ease-in-out;
+    }
+
+    @keyframes random-visit-spin {
+      from {
+        transform: rotate(0deg) scale(1);
+      }
+      50% {
+        transform: rotate(180deg) scale(1.2);
+      }
+      to {
+        transform: rotate(360deg) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-in-up,
+      .random-visit-spin {
+        animation: none;
+      }
     }
   </style>
 </MainGridLayout>

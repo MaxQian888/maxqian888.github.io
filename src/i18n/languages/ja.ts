@@ -316,4 +316,21 @@ export const ja: Translation = {
 	[Key.passwordError]: "パスワードが間違っています。もう一度お試しください。",
 	[Key.passwordProtectedRss]:
 		"この記事は暗号化されています。ウェブサイトにアクセスしてご覧ください。",
+
+	// 投稿ヒートマップ
+	[Key.postActivity]: "投稿ヒートマップ",
+	[Key.heatmapLess]: "少",
+	[Key.heatmapMore]: "多",
+	[Key.postsUnit]: "件",
+
+	// 友達ページ
+	[Key.randomVisit]: "ランダム訪問",
+
+	// アバウトページ
+	[Key.techStack]: "技術スタック",
+	[Key.techStackDesc]: "普段使っている技術とツール",
+
+	// 没入型リーディング
+	[Key.immersiveRead]: "没入型リーディング",
+	[Key.immersiveExit]: "没入型リーディングを終了",
 };

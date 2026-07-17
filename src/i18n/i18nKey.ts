@@ -302,6 +302,23 @@ enum I18nKey {
 	passwordSubmit = "passwordSubmit",
 	passwordError = "passwordError",
 	passwordProtectedRss = "passwordProtectedRss",
+
+	// 创作热力图
+	postActivity = "postActivity",
+	heatmapLess = "heatmapLess",
+	heatmapMore = "heatmapMore",
+	postsUnit = "postsUnit",
+
+	// 友链页面
+	randomVisit = "randomVisit",
+
+	// 关于页面
+	techStack = "techStack",
+	techStackDesc = "techStackDesc",
+
+	// 沉浸阅读
+	immersiveRead = "immersiveRead",
+	immersiveExit = "immersiveExit",
 }
 
 export default I18nKey;

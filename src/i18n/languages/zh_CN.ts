@@ -306,4 +306,21 @@ export const zh_CN: Translation = {
 	[Key.passwordSubmit]: "解锁",
 	[Key.passwordError]: "密码错误，请重试。",
 	[Key.passwordProtectedRss]: "本文已加密保护，请访问网站查看。",
+
+	// 创作热力图
+	[Key.postActivity]: "创作热力图",
+	[Key.heatmapLess]: "少",
+	[Key.heatmapMore]: "多",
+	[Key.postsUnit]: "篇",
+
+	// 友链页面
+	[Key.randomVisit]: "随机串门",
+
+	// 关于页面
+	[Key.techStack]: "技术栈",
+	[Key.techStackDesc]: "目前常用的技术与工具",
+
+	// 沉浸阅读
+	[Key.immersiveRead]: "沉浸阅读",
+	[Key.immersiveExit]: "退出沉浸阅读",
 };

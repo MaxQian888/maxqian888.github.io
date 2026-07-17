@@ -35,10 +35,17 @@ const description = i18n(I18nKey.guestbookDescription);
   >
     <div class="card-base z-10 px-9 py-6 relative w-full">
       <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-(--primary)/10 to-transparent pointer-events-none"></div>
+      <!-- 装饰性气泡 -->
+      <div class="absolute top-5 right-8 opacity-10 float-bubble pointer-events-none">
+        <Icon name="material-symbols:chat-bubble-outline" class="text-4xl text-(--primary)" />
+      </div>
+      <div class="absolute bottom-4 right-24 opacity-[0.07] float-bubble pointer-events-none" style="animation-delay: 2s">
+        <Icon name="material-symbols:mark-chat-unread-outline" class="text-3xl text-(--primary)" />
+      </div>
       <!-- 页面标题和描述 -->
       <div class="mb-8">
         <div class="flex items-center gap-3 mb-3">
-          <div class="h-8 w-8 rounded-lg bg-(--primary) flex items-center justify-center text-white dark:text-black/70">
+          <div class="guestbook-icon h-8 w-8 rounded-lg bg-(--primary) flex items-center justify-center text-white dark:text-black/70">
             <Icon name="material-symbols:chat" class="text-[1.5rem]"></Icon>
           </div>
           <div class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">
@@ -89,3 +96,43 @@ const description = i18n(I18nKey.guestbookDescription);
     )}
   </div>
 </MainGridLayout>
+
+<style>
+  /* 标题图标轻微摇摆 */
+  .guestbook-icon {
+    animation: chat-wiggle 4s ease-in-out infinite;
+  }
+
+  @keyframes chat-wiggle {
+    0%, 88%, 100% {
+      transform: rotate(0deg);
+    }
+    92% {
+      transform: rotate(-8deg);
+    }
+    96% {
+      transform: rotate(8deg);
+    }
+  }
+
+  /* 装饰气泡漂浮 */
+  .float-bubble {
+    animation: bubble-float 6s ease-in-out infinite;
+  }
+
+  @keyframes bubble-float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .guestbook-icon,
+    .float-bubble {
+      animation: none;
+    }
+  }
+</style>
