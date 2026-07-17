@@ -68,6 +68,9 @@ export const ru: Translation = {
 	[Key.postCount]: "пост",
 	[Key.postsCount]: "постов",
 
+	[Key.prevPost]: "Предыдущая",
+	[Key.nextPost]: "Следующая",
+
 	[Key.themeColor]: "Цвет темы",
 
 	[Key.lightMode]: "Светлая",

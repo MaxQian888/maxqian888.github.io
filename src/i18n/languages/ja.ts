@@ -68,6 +68,9 @@ export const ja: Translation = {
 	[Key.postCount]: "投稿",
 	[Key.postsCount]: "投稿",
 
+	[Key.prevPost]: "前の記事",
+	[Key.nextPost]: "次の記事",
+
 	[Key.themeColor]: "テーマカラー",
 
 	[Key.lightMode]: "ライト",
