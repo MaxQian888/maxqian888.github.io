@@ -1,4 +1,6 @@
 ---
+import { Icon } from "astro-icon/components";
+
 interface Props {
 	src: string;
 	albumId: string;
@@ -13,14 +15,49 @@ const { src, albumId, alt = "" } = Astro.props;
     data-fancybox={`gallery-${albumId}`}
     data-src={src}
     data-type="image"
-    class="block rounded-xl overflow-hidden group cursor-pointer"
+    class="block rounded-xl overflow-hidden group cursor-pointer relative"
   >
     <img
       src={src}
       alt={alt}
       loading="lazy"
       decoding="async"
-      class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+      class="gallery-photo-img w-full h-auto object-cover group-hover:scale-105"
+      onload="this.classList.add('is-loaded')"
+      onerror="this.classList.add('is-loaded')"
     />
+    <div
+      class="absolute inset-0 pointer-events-none flex items-center justify-center bg-black/0 group-hover:bg-black/25 transition-colors duration-300"
+    >
+      <Icon
+        name="material-symbols:zoom-in-rounded"
+        class="text-white text-4xl drop-shadow opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300"
+      />
+    </div>
   </div>
 </div>
+
+<style>
+  /* 加载完成前隐藏并模糊，加载后淡入 */
+  .gallery-photo-img {
+    opacity: 0;
+    filter: blur(8px);
+    transition:
+      opacity 0.5s ease,
+      filter 0.5s ease,
+      transform 0.4s ease;
+  }
+
+  .gallery-photo-img.is-loaded {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-photo-img {
+      opacity: 1;
+      filter: none;
+      transition: none;
+    }
+  }
+</style>

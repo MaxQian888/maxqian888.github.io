@@ -68,6 +68,9 @@ export const en: Translation = {
 	[Key.postCount]: "post",
 	[Key.postsCount]: "posts",
 
+	[Key.prevPost]: "Previous",
+	[Key.nextPost]: "Next",
+
 	[Key.themeColor]: "Theme Color",
 
 	[Key.lightMode]: "Light",

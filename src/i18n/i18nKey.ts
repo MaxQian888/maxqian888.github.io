@@ -40,6 +40,10 @@ enum I18nKey {
 	postCount = "postCount",
 	postsCount = "postsCount",
 
+	// 上下篇导航
+	prevPost = "prevPost",
+	nextPost = "nextPost",
+
 	// Music Widget
 	musicNoPlaying = "musicNoPlaying",
 	musicLyrics = "musicLyrics",

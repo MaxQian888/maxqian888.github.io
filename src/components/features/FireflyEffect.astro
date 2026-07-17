@@ -1,0 +1,189 @@
+---
+import { fireflyConfig } from "@/config";
+
+// 萤火虫背景特效 —— 呼应 Firefly 主题
+// 暖黄绿色光点在页面上缓慢游弋、呼吸明灭，默认仅在暗色模式显示
+const config = fireflyConfig;
+---
+
+{fireflyConfig?.enable && (
+	<script is:inline define:vars={{ fireflyConfig: config }}>
+		(function () {
+			if (window.fireflyInitialized) return;
+			window.fireflyInitialized = true;
+
+			// 用户偏好减少动态效果时完全跳过
+			if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+				return;
+			}
+
+			const config = fireflyConfig;
+			const TWO_PI = Math.PI * 2;
+
+			function rand(min, max) {
+				return min + Math.random() * (max - min);
+			}
+
+			class Firefly {
+				constructor(w, h) {
+					this.reset(w, h, true);
+				}
+
+				reset(w, h, randomizePos) {
+					if (randomizePos) {
+						this.x = Math.random() * w;
+						this.y = Math.random() * h;
+					}
+					this.radius = rand(config.size.min, config.size.max);
+					this.speed = rand(config.speed.min, config.speed.max);
+					this.angle = Math.random() * TWO_PI;
+					// 每只萤火虫有自己的呼吸节奏和相位
+					this.twinkleFreq = rand(0.4, 1.1);
+					this.twinklePhase = Math.random() * TWO_PI;
+					this.baseAlpha = rand(0.5, 0.95);
+				}
+
+				update(dt, t, w, h) {
+					// 缓慢随机转向，形成游弋轨迹
+					this.angle += rand(-1.2, 1.2) * dt;
+					this.x += Math.cos(this.angle) * this.speed * dt;
+					this.y +=
+						Math.sin(this.angle) * this.speed * dt * 0.7 +
+						Math.sin(t * 0.6 + this.twinklePhase) * 4 * dt;
+
+					// 越界后从另一侧飘回，留出光晕余量
+					const m = this.radius * 6;
+					if (this.x < -m) this.x = w + m;
+					else if (this.x > w + m) this.x = -m;
+					if (this.y < -m) this.y = h + m;
+					else if (this.y > h + m) this.y = -m;
+
+					// 呼吸明灭：0.15 ~ 1 之间缓慢波动
+					const breath =
+						0.5 + 0.5 * Math.sin(t * this.twinkleFreq * TWO_PI + this.twinklePhase);
+					this.alpha = this.baseAlpha * (0.15 + 0.85 * breath);
+				}
+
+				draw(ctx) {
+					const glowR = this.radius * 5;
+					const g = ctx.createRadialGradient(
+						this.x, this.y, 0,
+						this.x, this.y, glowR
+					);
+					g.addColorStop(0, `rgba(${config.color}, ${this.alpha})`);
+					g.addColorStop(0.4, `rgba(${config.color}, ${this.alpha * 0.35})`);
+					g.addColorStop(1, `rgba(${config.color}, 0)`);
+					ctx.fillStyle = g;
+					ctx.beginPath();
+					ctx.arc(this.x, this.y, glowR, 0, TWO_PI);
+					ctx.fill();
+				}
+			}
+
+			class FireflyManager {
+				constructor() {
+					this.canvas = null;
+					this.ctx = null;
+					this.fireflies = [];
+					this.animationId = null;
+					this.lastTime = 0;
+					this.handleResize = this.handleResize.bind(this);
+					this.tick = this.tick.bind(this);
+				}
+
+				start() {
+					if (this.canvas) return;
+					this.canvas = document.createElement("canvas");
+					this.canvas.id = "canvas_firefly";
+					this.canvas.setAttribute(
+						"style",
+						`position: fixed; inset: 0; pointer-events: none; z-index: ${config.zIndex};`
+					);
+					document.body.appendChild(this.canvas);
+					this.ctx = this.canvas.getContext("2d");
+					this.handleResize();
+					window.addEventListener("resize", this.handleResize);
+
+					const w = window.innerWidth;
+					const h = window.innerHeight;
+					this.fireflies = Array.from(
+						{ length: config.count },
+						() => new Firefly(w, h)
+					);
+					this.lastTime = performance.now();
+					this.animationId = requestAnimationFrame(this.tick);
+				}
+
+				stop() {
+					if (this.animationId) {
+						cancelAnimationFrame(this.animationId);
+						this.animationId = null;
+					}
+					window.removeEventListener("resize", this.handleResize);
+					if (this.canvas) {
+						this.canvas.remove();
+						this.canvas = null;
+						this.ctx = null;
+					}
+					this.fireflies = [];
+				}
+
+				handleResize() {
+					if (!this.canvas || !this.ctx) return;
+					const dpr = Math.min(window.devicePixelRatio || 1, 2);
+					this.canvas.width = window.innerWidth * dpr;
+					this.canvas.height = window.innerHeight * dpr;
+					this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+				}
+
+				tick(now) {
+					if (!this.ctx || !this.canvas) return;
+					// 切后台回来时钳制时间差，避免瞬移
+					const dt = Math.min((now - this.lastTime) / 1000, 0.05);
+					this.lastTime = now;
+					const t = now / 1000;
+					const w = window.innerWidth;
+					const h = window.innerHeight;
+
+					this.ctx.clearRect(0, 0, w, h);
+					for (const f of this.fireflies) {
+						f.update(dt, t, w, h);
+						f.draw(this.ctx);
+					}
+					this.animationId = requestAnimationFrame(this.tick);
+				}
+			}
+
+			const manager = new FireflyManager();
+
+			function isDarkMode() {
+				return document.documentElement.classList.contains("dark");
+			}
+
+			function sync() {
+				if (!config.darkModeOnly || isDarkMode()) {
+					manager.start();
+				} else {
+					manager.stop();
+				}
+			}
+
+			function setup() {
+				sync();
+				// 跟随明暗主题切换启停
+				if (config.darkModeOnly) {
+					new MutationObserver(sync).observe(document.documentElement, {
+						attributes: true,
+						attributeFilter: ["class"],
+					});
+				}
+			}
+
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", setup);
+			} else {
+				setup();
+			}
+		})();
+	</script>
+)}
