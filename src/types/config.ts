@@ -449,6 +449,22 @@ export type SakuraConfig = {
 	zIndex: number; // 层级，确保樱花在合适的层级显示
 };
 
+export type FireflyConfig = {
+	enable: boolean; // 是否启用萤火虫特效
+	count: number; // 萤火虫数量
+	darkModeOnly: boolean; // 是否仅在暗色模式显示（亮色背景下萤光不明显）
+	color: string; // 萤光颜色，格式 "R, G, B"
+	size: {
+		min: number; // 光点最小半径（px）
+		max: number; // 光点最大半径（px）
+	};
+	speed: {
+		min: number; // 移动速度最小值（px/秒）
+		max: number; // 移动速度最大值（px/秒）
+	};
+	zIndex: number; // 画布层级
+};
+
 // Spine 看板娘配置
 export type SpineModelConfig = {
 	enable: boolean; // 是否启用 Spine 看板娘
