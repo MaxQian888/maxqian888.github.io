@@ -538,6 +538,39 @@ const siteLang = lang.replace("_", "-");
     ]}
   >
 
+    <!-- 初始加载动画：仅硬加载显示，DOM 就绪即淡出并移除（Swup 换页走 #progress-bar）；样式见 transition.css -->
+    <div id="page-loader" aria-hidden="true">
+      <div class="page-loader-firefly"></div>
+    </div>
+    <noscript><style>#page-loader { display: none; }</style></noscript>
+    <script is:inline>
+      (function () {
+        const loader = document.getElementById("page-loader");
+        if (!loader) return;
+        let hidden = false;
+        const hide = function () {
+          if (hidden) return;
+          hidden = true;
+          loader.classList.add("loaded");
+          setTimeout(function () {
+            loader.remove();
+          }, 400);
+        };
+        if (document.readyState !== "loading") {
+          hide();
+        } else {
+          document.addEventListener("DOMContentLoaded", hide);
+        }
+        window.addEventListener("load", hide);
+        // 兜底：脚本异常或资源阻塞时也不长时间遮挡页面
+        setTimeout(hide, 5000);
+        // bfcache 恢复时确保不残留
+        window.addEventListener("pageshow", function (e) {
+          if (e.persisted) hide();
+        });
+      })();
+    </script>
+
     <div id="progress-bar"></div>
 
     <!-- 页面顶部渐变高光效果 - 只在full和semifull模式下显示 -->
