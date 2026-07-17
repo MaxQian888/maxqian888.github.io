@@ -317,4 +317,21 @@ export const en: Translation = {
 	[Key.passwordError]: "Incorrect password, please try again.",
 	[Key.passwordProtectedRss]:
 		"This article is encrypted. Please visit the website to view it.",
+
+	// Post Activity Heatmap
+	[Key.postActivity]: "Post Activity",
+	[Key.heatmapLess]: "Less",
+	[Key.heatmapMore]: "More",
+	[Key.postsUnit]: "post(s)",
+
+	// Friends Page
+	[Key.randomVisit]: "Random Visit",
+
+	// About Page
+	[Key.techStack]: "Tech Stack",
+	[Key.techStackDesc]: "Technologies and tools I use",
+
+	// Immersive Reading
+	[Key.immersiveRead]: "Immersive Reading",
+	[Key.immersiveExit]: "Exit Immersive Reading",
 };

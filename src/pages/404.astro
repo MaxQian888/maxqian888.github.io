@@ -14,12 +14,12 @@ const recentPosts = (await getSortedPostsList()).slice(0, 5);
     <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-96">
         <div class="card-base z-10 px-9 py-12 relative w-full flex flex-col items-center justify-center text-center">
             <!-- 404 大号数字 -->
-            <div class="text-8xl md:text-9xl font-bold text-(--primary) opacity-20 mb-4">
+            <div class="not-found-figure text-8xl md:text-9xl font-bold text-(--primary) opacity-20 mb-4 select-none">
                 {i18n(I18nKey.notFound)}
             </div>
-            
+
             <!-- 404 图标 -->
-            <div class="mb-6">
+            <div class="mb-6 not-found-icon">
                 <Icon name="material-symbols:error-outline" class="text-6xl text-(--primary)" />
             </div>
             
@@ -37,21 +37,21 @@ const recentPosts = (await getSortedPostsList()).slice(0, 5);
             <div class="flex flex-wrap items-center justify-center gap-3">
                 <a
                     href={url("/")}
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-(--primary) text-white rounded-(--radius-large) hover:bg-(--btn-content) transition-colors duration-200 font-medium"
+                    class="quick-link inline-flex items-center gap-2 px-6 py-3 bg-(--primary) text-white rounded-(--radius-large) hover:bg-(--btn-content) transition-all duration-200 font-medium"
                 >
                     <Icon name="material-symbols:home" class="text-xl" />
                     {i18n(I18nKey.backToHome)}
                 </a>
                 <a
                     href={url("/search/")}
-                    class="inline-flex items-center gap-2 px-6 py-3 btn-regular rounded-(--radius-large) font-medium"
+                    class="quick-link inline-flex items-center gap-2 px-6 py-3 btn-regular rounded-(--radius-large) font-medium"
                 >
                     <Icon name="material-symbols:search" class="text-xl" />
                     {i18n(I18nKey.search)}
                 </a>
                 <a
                     href={url("/archive/")}
-                    class="inline-flex items-center gap-2 px-6 py-3 btn-regular rounded-(--radius-large) font-medium"
+                    class="quick-link inline-flex items-center gap-2 px-6 py-3 btn-regular rounded-(--radius-large) font-medium"
                 >
                     <Icon name="material-symbols:archive-outline" class="text-xl" />
                     {i18n(I18nKey.archive)}
@@ -59,10 +59,10 @@ const recentPosts = (await getSortedPostsList()).slice(0, 5);
             </div>
             
             <!-- 装饰性元素 -->
-            <div class="absolute top-4 left-4 opacity-10">
+            <div class="absolute top-4 left-4 opacity-10 float-deco">
                 <Icon name="material-symbols:sentiment-sad" class="text-4xl text-(--primary)" />
             </div>
-            <div class="absolute bottom-4 right-4 opacity-10">
+            <div class="absolute bottom-4 right-4 opacity-10 float-deco" style="animation-delay: 1.5s">
                 <Icon name="material-symbols:search-off" class="text-4xl text-(--primary)" />
             </div>
         </div>
@@ -97,11 +97,11 @@ const recentPosts = (await getSortedPostsList()).slice(0, 5);
 </MainGridLayout>
 
 <style>
-    /* 添加一些动画效果 */
+    /* 入场动画 */
     .card-base {
         animation: fadeInUp 0.6s ease-out;
     }
-    
+
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -112,10 +112,61 @@ const recentPosts = (await getSortedPostsList()).slice(0, 5);
             transform: translateY(0);
         }
     }
-    
-    /* 按钮悬停效果 */
-    a:hover {
+
+    /* 404 数字缓慢漂浮 */
+    .not-found-figure {
+        animation: figure-float 5s ease-in-out infinite;
+    }
+
+    @keyframes figure-float {
+        0%, 100% {
+            transform: translateY(0) rotate(-1.5deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(1.5deg);
+        }
+    }
+
+    /* 图标轻微摇摆 */
+    .not-found-icon {
+        animation: icon-wobble 3s ease-in-out infinite;
+        transform-origin: 50% 20%;
+    }
+
+    @keyframes icon-wobble {
+        0%, 100% {
+            transform: rotate(-6deg);
+        }
+        50% {
+            transform: rotate(6deg);
+        }
+    }
+
+    /* 装饰元素漂浮 */
+    .float-deco {
+        animation: deco-float 6s ease-in-out infinite;
+    }
+
+    @keyframes deco-float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-12px);
+        }
+    }
+
+    /* 快捷入口按钮悬停 */
+    .quick-link:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+        box-shadow: 0 4px 12px oklch(from var(--primary) l c h / 0.3);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .not-found-figure,
+        .not-found-icon,
+        .float-deco {
+            animation: none;
+        }
     }
 </style>

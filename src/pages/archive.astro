@@ -1,5 +1,6 @@
 ---
 import ArchivePanel from "@components/controls/ArchivePanel.svelte";
+import PostHeatmap from "@components/misc/PostHeatmap.astro";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import MainGridLayout from "@layouts/MainGridLayout.astro";
@@ -56,5 +57,6 @@ const stats = [
       ))}
     </div>
   </div>
+  <PostHeatmap dates={sortedPostsList.map((post) => post.data.published)} />
   <ArchivePanel sortedPosts={sortedPostsList} client:only="svelte" />
 </MainGridLayout>

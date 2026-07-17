@@ -40,6 +40,82 @@ for (const post of posts) {
 	}
 }
 
+// 技术栈展示，替代 markdown 中的 shields.io 外链徽章
+const techStack = [
+	{
+		name: "C++",
+		icon: "simple-icons:cplusplus",
+		color: "#00599C",
+		desc: "高性能与系统开发",
+	},
+	{
+		name: "C",
+		icon: "simple-icons:c",
+		color: "#A8B9CC",
+		desc: "底层与嵌入式",
+	},
+	{
+		name: "Python",
+		icon: "simple-icons:python",
+		color: "#3776AB",
+		desc: "数据处理与脚本",
+	},
+	{
+		name: "TypeScript",
+		icon: "simple-icons:typescript",
+		color: "#3178C6",
+		desc: "类型安全的前端",
+	},
+	{
+		name: "JavaScript",
+		icon: "simple-icons:javascript",
+		color: "#E8C31E",
+		desc: "Web 开发",
+	},
+	{
+		name: "Qt",
+		icon: "simple-icons:qt",
+		color: "#41CD52",
+		desc: "跨平台 GUI 框架",
+	},
+	{
+		name: "Git",
+		icon: "simple-icons:git",
+		color: "#F05032",
+		desc: "版本控制",
+	},
+	{
+		name: "GitHub",
+		icon: "simple-icons:github",
+		color: "",
+		desc: "开源协作",
+	},
+	{
+		name: "VS Code",
+		icon: "simple-icons:vscodium",
+		color: "#2F80ED",
+		desc: "主力编辑器",
+	},
+	{
+		name: "CLion",
+		icon: "simple-icons:clion",
+		color: "#21D789",
+		desc: "C/C++ IDE",
+	},
+	{
+		name: "PyCharm",
+		icon: "simple-icons:pycharm",
+		color: "#FCB414",
+		desc: "Python IDE",
+	},
+	{
+		name: "CMake",
+		icon: "simple-icons:cmake",
+		color: "#064F8C",
+		desc: "构建系统",
+	},
+];
+
 const stats = [
 	{
 		icon: "material-symbols:article-outline",
@@ -111,6 +187,33 @@ const stats = [
         </div>
     </div>
 
+    <!-- Tech stack -->
+    <div class="card-base rounded-(--radius-large) px-9 py-6 mb-4 onload-animation">
+        <div class="flex items-center gap-3 mb-1">
+            <div class="h-8 w-8 rounded-lg bg-(--primary)/10 flex items-center justify-center">
+                <Icon name="material-symbols:stacks-outline-rounded" class="text-[1.25rem] text-(--primary)" />
+            </div>
+            <h2 class="text-xl font-bold text-90">{i18n(I18nKey.techStack)}</h2>
+        </div>
+        <p class="text-sm text-50 mb-5">{i18n(I18nKey.techStackDesc)}</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {techStack.map((tech) => (
+                <div class="tech-item group flex items-center gap-3 p-3 rounded-xl border border-(--line-divider) hover:border-(--primary)/50 hover:shadow-lg transition-all duration-300">
+                    <div
+                        class="w-10 h-10 rounded-lg bg-(--btn-regular-bg) flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300 text-90"
+                        style={tech.color ? `color: ${tech.color};` : undefined}
+                    >
+                        <Icon name={tech.icon} class="text-[1.35rem]" />
+                    </div>
+                    <div class="min-w-0">
+                        <div class="font-semibold text-sm text-90 truncate">{tech.name}</div>
+                        <div class="text-xs text-50 truncate">{tech.desc}</div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+
     <!-- About content -->
     <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32 onload-animation">
         <div class="card-base z-10 px-9 py-6 relative w-full ">
@@ -120,3 +223,9 @@ const stats = [
         </div>
     </div>
 </MainGridLayout>
+
+<style>
+    .tech-item:hover {
+        transform: translateY(-2px);
+    }
+</style>

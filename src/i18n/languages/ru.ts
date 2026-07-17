@@ -318,4 +318,21 @@ export const ru: Translation = {
 	[Key.passwordError]: "Неверный пароль, попробуйте снова.",
 	[Key.passwordProtectedRss]:
 		"Эта статья зашифрована. Пожалуйста, посетите сайт для просмотра.",
+
+	// Тепловая карта публикаций
+	[Key.postActivity]: "Активность публикаций",
+	[Key.heatmapLess]: "Меньше",
+	[Key.heatmapMore]: "Больше",
+	[Key.postsUnit]: "публ.",
+
+	// Страница друзей
+	[Key.randomVisit]: "Случайный визит",
+
+	// Страница "Обо мне"
+	[Key.techStack]: "Технологии",
+	[Key.techStackDesc]: "Технологии и инструменты, которые я использую",
+
+	// Режим погружения
+	[Key.immersiveRead]: "Режим погружения",
+	[Key.immersiveExit]: "Выйти из режима погружения",
 };

@@ -1,0 +1,179 @@
+---
+import { Icon } from "astro-icon/components";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
+
+interface Props {
+	/** 文章发布日期列表 */
+	dates: Date[];
+}
+
+const { dates } = Astro.props;
+
+const CELL = 11; // 单元格边长(px)
+const GAP = 3; // 单元格间距(px)
+const COLUMN = CELL + GAP;
+
+// 文章日期按 UTC 存储(frontmatter 日期解析为 UTC 零点)，全程用 UTC 保持一致
+const now = new Date();
+const today = new Date(
+	Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+);
+// 往前推 52 周并对齐到周日，构造 GitHub 风格的周列
+const start = new Date(today);
+start.setUTCDate(start.getUTCDate() - start.getUTCDay() - 52 * 7);
+
+const counts = new Map<string, number>();
+for (const date of dates) {
+	const key = date.toISOString().substring(0, 10);
+	counts.set(key, (counts.get(key) || 0) + 1);
+}
+
+interface DayCell {
+	date: string;
+	count: number;
+	level: number;
+}
+
+const days: DayCell[] = [];
+let totalLastYear = 0;
+for (
+	const cursor = new Date(start);
+	cursor <= today;
+	cursor.setUTCDate(cursor.getUTCDate() + 1)
+) {
+	const key = cursor.toISOString().substring(0, 10);
+	const count = counts.get(key) || 0;
+	totalLastYear += count;
+	days.push({ date: key, count, level: Math.min(count, 4) });
+}
+
+// 月份标签：每列(周)首日所在月份发生变化时放置标签
+const monthKeys = [
+	I18nKey.calendarJanuary,
+	I18nKey.calendarFebruary,
+	I18nKey.calendarMarch,
+	I18nKey.calendarApril,
+	I18nKey.calendarMay,
+	I18nKey.calendarJune,
+	I18nKey.calendarJuly,
+	I18nKey.calendarAugust,
+	I18nKey.calendarSeptember,
+	I18nKey.calendarOctober,
+	I18nKey.calendarNovember,
+	I18nKey.calendarDecember,
+];
+
+const monthLabels: { label: string; week: number }[] = [];
+const weekCount = Math.ceil(days.length / 7);
+let prevMonth = -1;
+for (let w = 0; w < weekCount; w++) {
+	const first = days[w * 7];
+	if (!first) continue;
+	const month = Number(first.date.substring(5, 7)) - 1;
+	if (month !== prevMonth) {
+		// 避开最左端可能被截断的标签
+		if (w > 0 || monthLabels.length === 0) {
+			monthLabels.push({ label: i18n(monthKeys[month]), week: w });
+		}
+		prevMonth = month;
+	}
+}
+
+const weekdayLabels = [
+	{ label: i18n(I18nKey.calendarMonday), row: 2 },
+	{ label: i18n(I18nKey.calendarWednesday), row: 4 },
+	{ label: i18n(I18nKey.calendarFriday), row: 6 },
+];
+
+const postsUnit = i18n(I18nKey.postsUnit);
+---
+
+<div class="card-base rounded-(--radius-large) px-6 py-5 mb-4 onload-animation">
+    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+            <Icon name="material-symbols:local-fire-department-rounded" class="text-xl text-(--primary)" />
+            <span class="font-bold text-90">{i18n(I18nKey.postActivity)}</span>
+            <span class="text-sm font-medium px-2 py-0.5 rounded-full bg-(--primary)/10 text-(--primary)">
+                {totalLastYear}
+            </span>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-50">
+            <span>{i18n(I18nKey.heatmapLess)}</span>
+            {[0, 1, 2, 3, 4].map((level) => (
+                <span class="heatmap-cell inline-block" data-level={level}></span>
+            ))}
+            <span>{i18n(I18nKey.heatmapMore)}</span>
+        </div>
+    </div>
+    <heatmap-scroll class="block overflow-x-auto hide-scrollbar">
+        <div class="flex gap-2 w-max pb-1">
+            <div
+                class="grid shrink-0 text-[0.65rem] text-50 leading-none"
+                style={`grid-template-rows: repeat(7, ${CELL}px); row-gap: ${GAP}px; margin-top: ${CELL + GAP + 2}px;`}
+            >
+                {weekdayLabels.map(({ label, row }) => (
+                    <span style={`grid-row: ${row}; align-self: center;`}>{label}</span>
+                ))}
+            </div>
+            <div>
+                <div class="relative h-[13px] text-[0.65rem] text-50 leading-none">
+                    {monthLabels.map(({ label, week }) => (
+                        <span class="absolute" style={`left: ${week * COLUMN}px;`}>{label}</span>
+                    ))}
+                </div>
+                <div
+                    class="grid w-max"
+                    style={`grid-template-rows: repeat(7, ${CELL}px); grid-auto-flow: column; grid-auto-columns: ${CELL}px; gap: ${GAP}px;`}
+                >
+                    {days.map((day) => (
+                        <span
+                            class="heatmap-cell"
+                            data-level={day.level}
+                            title={`${day.date} · ${day.count} ${postsUnit}`}
+                        ></span>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </heatmap-scroll>
+</div>
+
+<script is:inline>
+    if (!customElements.get("heatmap-scroll")) {
+        class HeatmapScroll extends HTMLElement {
+            connectedCallback() {
+                // 默认滚动到最右端，优先展示最近的创作记录
+                requestAnimationFrame(() => {
+                    this.scrollLeft = this.scrollWidth;
+                });
+            }
+        }
+        customElements.define("heatmap-scroll", HeatmapScroll);
+    }
+</script>
+
+<style>
+    .heatmap-cell {
+        width: 11px;
+        height: 11px;
+        border-radius: 3px;
+        background-color: var(--btn-regular-bg);
+        transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+    .heatmap-cell[data-level="1"] {
+        background-color: color-mix(in oklch, var(--primary) 30%, var(--card-bg));
+    }
+    .heatmap-cell[data-level="2"] {
+        background-color: color-mix(in oklch, var(--primary) 55%, var(--card-bg));
+    }
+    .heatmap-cell[data-level="3"] {
+        background-color: color-mix(in oklch, var(--primary) 80%, var(--card-bg));
+    }
+    .heatmap-cell[data-level="4"] {
+        background-color: var(--primary);
+    }
+    .heatmap-cell[title]:hover {
+        transform: scale(1.35);
+    }
+</style>

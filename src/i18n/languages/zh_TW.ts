@@ -308,4 +308,21 @@ export const zh_TW: Translation = {
 	[Key.passwordSubmit]: "解鎖",
 	[Key.passwordError]: "密碼錯誤，請重試。",
 	[Key.passwordProtectedRss]: "本文已加密保護，請訪問網站查看。",
+
+	// 創作熱力圖
+	[Key.postActivity]: "創作熱力圖",
+	[Key.heatmapLess]: "少",
+	[Key.heatmapMore]: "多",
+	[Key.postsUnit]: "篇",
+
+	// 友鏈頁面
+	[Key.randomVisit]: "隨機串門",
+
+	// 關於頁面
+	[Key.techStack]: "技術棧",
+	[Key.techStackDesc]: "目前常用的技術與工具",
+
+	// 沉浸閱讀
+	[Key.immersiveRead]: "沉浸閱讀",
+	[Key.immersiveExit]: "退出沉浸閱讀",
 };
