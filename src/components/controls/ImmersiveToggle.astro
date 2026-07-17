@@ -1,0 +1,189 @@
+---
+import { Icon } from "astro-icon/components";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
+
+// 沉浸阅读切换按钮，仅在文章页渲染。
+// - 布局规则见 main.css 中 html.immersive-reading 段落
+// - 按钮在运行时被传送到 body 下，避免祖先 transform/contain 使 fixed 定位失效
+// - 进入沉浸模式时同时请求浏览器全屏（与浏览器沉浸式体验结合），退出时双向同步
+// - 自定义元素随 Swup 换页销毁时自动还原布局
+const enterLabel = i18n(I18nKey.immersiveRead);
+const exitLabel = i18n(I18nKey.immersiveExit);
+---
+
+<immersive-toggle
+    class="hidden"
+    data-enter-label={enterLabel}
+    data-exit-label={exitLabel}
+>
+    <button
+        class="immersive-btn"
+        aria-label={enterLabel}
+        title={`${enterLabel} (Esc)`}
+        aria-pressed="false"
+    >
+        <Icon name="material-symbols:auto-stories-outline-rounded" class="immersive-icon-enter text-[1.4rem]" />
+        <Icon name="material-symbols:close-fullscreen" class="immersive-icon-exit text-[1.4rem]" />
+    </button>
+</immersive-toggle>
+
+<script is:inline>
+    if (!customElements.get("immersive-toggle")) {
+        class ImmersiveToggle extends HTMLElement {
+            connectedCallback() {
+                this.btn = this.querySelector("button");
+                this.enteredFullscreen = false;
+
+                this.handleClick = () => this.setMode(!this.isOn());
+                this.handleKey = (e) => {
+                    if (e.key === "Escape" && this.isOn()) this.setMode(false);
+                };
+                // 用户通过浏览器 UI/Esc 退出全屏时，同步退出沉浸模式
+                this.handleFsChange = () => {
+                    if (
+                        !document.fullscreenElement &&
+                        this.enteredFullscreen &&
+                        this.isOn()
+                    ) {
+                        this.setMode(false);
+                    }
+                };
+
+                if (this.btn) {
+                    // 传送到 body，摆脱祖先 transform/contain 对 fixed 的影响
+                    document.body.appendChild(this.btn);
+                    this.btn.addEventListener("click", this.handleClick);
+                }
+                document.addEventListener("keydown", this.handleKey);
+                document.addEventListener(
+                    "fullscreenchange",
+                    this.handleFsChange
+                );
+
+                // 同一会话内保持沉浸布局（例如从文章跳到下一篇），全屏需用户手势无法自动恢复
+                if (sessionStorage.getItem("immersive-reading") === "1") {
+                    this.applyMode(true);
+                }
+            }
+
+            disconnectedCallback() {
+                this.btn?.removeEventListener("click", this.handleClick);
+                document.removeEventListener("keydown", this.handleKey);
+                document.removeEventListener(
+                    "fullscreenchange",
+                    this.handleFsChange
+                );
+                this.btn?.remove();
+                // 离开文章页时还原布局与全屏，但保留会话偏好；
+                // 若新文章页的开关已接管（文章间跳转），则不作还原
+                if (!document.querySelector("immersive-toggle")) {
+                    document.documentElement.classList.remove(
+                        "immersive-reading"
+                    );
+                    if (this.enteredFullscreen && document.fullscreenElement) {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                }
+            }
+
+            isOn() {
+                return document.documentElement.classList.contains(
+                    "immersive-reading"
+                );
+            }
+
+            applyMode(on) {
+                document.documentElement.classList.toggle(
+                    "immersive-reading",
+                    on
+                );
+                if (this.btn) {
+                    this.btn.setAttribute("aria-pressed", on ? "true" : "false");
+                    const label = on
+                        ? this.dataset.exitLabel
+                        : this.dataset.enterLabel;
+                    this.btn.setAttribute("aria-label", label);
+                    this.btn.setAttribute("title", `${label} (Esc)`);
+                }
+            }
+
+            setMode(on) {
+                this.applyMode(on);
+                sessionStorage.setItem("immersive-reading", on ? "1" : "0");
+
+                // 与浏览器全屏沉浸体验结合；不支持或被拒绝时静默降级
+                if (on) {
+                    const root = document.documentElement;
+                    if (root.requestFullscreen && !document.fullscreenElement) {
+                        root.requestFullscreen({ navigationUI: "hide" })
+                            .then(() => {
+                                this.enteredFullscreen = true;
+                            })
+                            .catch(() => {});
+                    }
+                } else {
+                    if (this.enteredFullscreen && document.fullscreenElement) {
+                        document.exitFullscreen().catch(() => {});
+                    }
+                    this.enteredFullscreen = false;
+                }
+            }
+        }
+        customElements.define("immersive-toggle", ImmersiveToggle);
+    }
+</script>
+
+<style is:global>
+    .immersive-btn {
+        position: fixed;
+        right: 0.75rem;
+        top: 50%;
+        z-index: 90;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 1rem;
+        color: var(--primary);
+        background-color: var(--card-bg);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(12px);
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transform: translateY(-50%);
+    }
+
+    @media (min-width: 768px) {
+        .immersive-btn {
+            right: 1rem;
+        }
+    }
+
+    :root.dark .immersive-btn {
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .immersive-btn:hover {
+        background-color: var(--btn-card-bg-hover);
+        transform: translateY(-50%) scale(1.08);
+    }
+
+    .immersive-btn:active {
+        transform: translateY(-50%) scale(0.92);
+    }
+
+    .immersive-icon-exit {
+        display: none;
+    }
+
+    html.immersive-reading .immersive-icon-enter {
+        display: none;
+    }
+
+    html.immersive-reading .immersive-icon-exit {
+        display: block;
+    }
+</style>
