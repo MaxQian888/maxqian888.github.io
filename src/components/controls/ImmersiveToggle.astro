@@ -34,8 +34,13 @@ const exitLabel = i18n(I18nKey.immersiveExit);
             connectedCallback() {
                 this.btn = this.querySelector("button");
                 this.enteredFullscreen = false;
+                this.switching = false;
 
-                this.handleClick = () => this.setMode(!this.isOn());
+                // 切换动画播放期间忽略点击，防止连点与全屏请求竞争
+                this.handleClick = () => {
+                    if (this.switching) return;
+                    this.setMode(!this.isOn());
+                };
                 this.handleKey = (e) => {
                     if (e.key === "Escape" && this.isOn()) this.setMode(false);
                 };
@@ -75,6 +80,10 @@ const exitLabel = i18n(I18nKey.immersiveExit);
                     this.handleFsChange
                 );
                 this.btn?.remove();
+                clearTimeout(this.switchTimer);
+                document.documentElement.classList.remove(
+                    "immersive-switching"
+                );
                 // 离开文章页时还原布局与全屏，但保留会话偏好；
                 // 若新文章页的开关已接管（文章间跳转），则不作还原
                 if (!document.querySelector("immersive-toggle")) {
@@ -109,18 +118,29 @@ const exitLabel = i18n(I18nKey.immersiveExit);
             }
 
             setMode(on) {
+                // immersive-switching 驱动 main.css/本组件的切换动画，动画期内锁定按钮
+                const root = document.documentElement;
+                this.switching = true;
+                root.classList.add("immersive-switching");
+                clearTimeout(this.switchTimer);
+                this.switchTimer = setTimeout(() => {
+                    root.classList.remove("immersive-switching");
+                    this.switching = false;
+                }, 450);
+
                 this.applyMode(on);
                 sessionStorage.setItem("immersive-reading", on ? "1" : "0");
 
-                // 与浏览器全屏沉浸体验结合；不支持或被拒绝时静默降级
+                // 与浏览器全屏沉浸体验结合；不支持或被拒绝时静默降级。
+                // 同步置位 enteredFullscreen，避免请求未落定时退出沉浸导致全屏残留
                 if (on) {
-                    const root = document.documentElement;
                     if (root.requestFullscreen && !document.fullscreenElement) {
-                        root.requestFullscreen({ navigationUI: "hide" })
-                            .then(() => {
-                                this.enteredFullscreen = true;
-                            })
-                            .catch(() => {});
+                        this.enteredFullscreen = true;
+                        root.requestFullscreen({ navigationUI: "hide" }).catch(
+                            () => {
+                                this.enteredFullscreen = false;
+                            }
+                        );
                     }
                 } else {
                     if (this.enteredFullscreen && document.fullscreenElement) {
@@ -185,5 +205,39 @@ const exitLabel = i18n(I18nKey.immersiveExit);
 
     html.immersive-reading .immersive-icon-exit {
         display: block;
+    }
+
+    /* 切换动画期间：按钮回弹 + 新图标旋入，作为点击的即时反馈；
+       pointer-events 兜底拦截连点（JS 锁为主） */
+    html.immersive-switching .immersive-btn {
+        pointer-events: none;
+        animation: immersive-btn-pop 350ms ease;
+    }
+
+    html.immersive-switching .immersive-btn svg {
+        animation: immersive-icon-swap 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes immersive-btn-pop {
+        0% {
+            transform: translateY(-50%) scale(1);
+        }
+        40% {
+            transform: translateY(-50%) scale(0.85);
+        }
+        100% {
+            transform: translateY(-50%) scale(1);
+        }
+    }
+
+    @keyframes immersive-icon-swap {
+        from {
+            transform: rotate(-120deg) scale(0.4);
+            opacity: 0;
+        }
+        to {
+            transform: rotate(0deg) scale(1);
+            opacity: 1;
+        }
     }
 </style>

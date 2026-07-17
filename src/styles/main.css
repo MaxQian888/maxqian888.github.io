@@ -568,6 +568,25 @@ html.immersive-reading #main-grid > *:not(.absolute) {
   grid-column: 1 !important;
 }
 
+/* 沉浸模式切换动画（immersive-switching 由 ImmersiveToggle 短暂添加）：
+   压缩导航栏 700ms 过渡，主栅格淡入以掩盖侧栏消失/栅格重排的跳变 */
+html.immersive-switching #top-row {
+  transition-duration: 320ms;
+}
+
+html.immersive-switching #main-grid {
+  animation: immersive-grid-fade 350ms ease-out;
+}
+
+@keyframes immersive-grid-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* 响应式分页样式 */
 .device-mobile .pagination-info {
   @apply text-xs;
