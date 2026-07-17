@@ -209,6 +209,31 @@ const descriptionText = description || remarkPluginFrontmatter.excerpt || "";
 </div>
 
 <style define:vars={{ coverWidth, descriptionClampLines }}>
+  /* 悬停浮起：轻微上移 + 柔和阴影，让列表更灵动 */
+  /* 用独立的 translate 属性而非 transform，避免被 onload-animation 的 forwards 填充覆盖 */
+  .post-card-wrapper.card-base {
+    transition:
+      translate 0.3s ease,
+      box-shadow 0.3s ease,
+      background-color 0.15s,
+      border-color 0.3s;
+  }
+
+  .post-card-wrapper.card-base:hover {
+    translate: 0 -4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  :global(.dark) .post-card-wrapper.card-base:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .post-card-wrapper.card-base:hover {
+      translate: none;
+    }
+  }
+
   .description-clamped {
     display: -webkit-box;
     -webkit-box-orient: vertical;
